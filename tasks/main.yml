@@ -1,0 +1,25 @@
+-
+    name: Adding freeswitch repository
+    sudo: yes
+    command: add-apt-repository 'deb http://files.freeswitch.org/repo/deb/debian/ wheezy main' state=present
+    tags: freeswitch
+-
+    name: Import repository key
+    sudo: yes
+    command: gpg --keyserver pool.sks-keyservers.net --recv-key D76EDC7725E010CF
+    tags: freeswitch
+-
+    name: Add repository key
+    sudo: yes
+    shell: gpg -a --export D76EDC7725E010CF | apt-key add -
+    tags: freeswitch
+-
+    name: Installing freeswitch
+    apt: pkg={{ item }} update_cache=yes
+    with_items:
+        - freeswitch-meta-vanilla
+-
+    name: Run freeswitch daemon
+    sudo: yes
+    service: name=freeswitch state=restarted
+    tags: freeswitch
